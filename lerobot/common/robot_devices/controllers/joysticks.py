@@ -412,14 +412,14 @@ class PS4JoystickController:
         Define the allowed ranges for each motor.
         """
         allowed_ranges = {
-            "shoulder_pan": (-10, 190),
-            "shoulder_lift": (-5, 185),
-            "elbow_flex": (-5, 185),
-            "wrist_flex": (-110, 110),
-            "wrist_roll": (-110, 110),
+            "shoulder_pan": (-90, 90),
+            "shoulder_lift": (-100, 185),
+            "elbow_flex": (-100, 185),
+            "wrist_flex": (-150, 190),
+            "wrist_roll": (-50, 190),
             "gripper": (0, 100),
-            "x": (15, 250),
-            "y": (-110, 250),
+            "x": (15, 300),
+            "y": (-150, 300),
         }
 
         for motor, (min_val, max_val) in allowed_ranges.items():
