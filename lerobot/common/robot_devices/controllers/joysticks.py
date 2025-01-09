@@ -13,7 +13,7 @@ import threading
 import time
 
 import hid
-
+logging.getLogger().setLevel(logging.DEBUG)
 
 class PS4JoystickController:
     def __init__(
@@ -282,7 +282,7 @@ class PS4JoystickController:
 
     def _update_positions(self, axes, buttons):
         # Compute new positions based on inputs
-        speed = 0.3
+        speed = 0.25
         # TODO: speed can be different for different directions
 
         temp_positions = self.current_positions.copy()
@@ -413,15 +413,14 @@ class PS4JoystickController:
         """
         allowed_ranges = {
             "shoulder_pan": (-90, 90),
-            "shoulder_lift": (-100, 185),
-            "elbow_flex": (-100, 185),
+            "shoulder_lift": (-100, 210),
+            "elbow_flex": (-100, 200),
             "wrist_flex": (-150, 190),
             "wrist_roll": (-50, 190),
             "gripper": (0, 100),
             "x": (15, 300),
             "y": (-150, 300),
         }
-
         for motor, (min_val, max_val) in allowed_ranges.items():
             if motor in positions and not (min_val <= positions[motor] <= max_val):
                 logging.error(
@@ -446,7 +445,7 @@ class PS4JoystickController:
         set the motors to predefined positions.
         """
         macros = {
-            "O": [90, 170, 170, 0, 0, 10],  # initial position
+            "O": [0, 195, 185, 65, 0, 0],  # HOME
             "X": [90, 50, 130, -90, 90, 80],  # low horizontal gripper
             "T": [90, 130, 150, 70, 90, 80],  # top down gripper
             "S": [90, 160, 140, 20, 0, 0],  # looking forward
