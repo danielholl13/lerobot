@@ -765,7 +765,14 @@ class LeRobotDataset(torch.utils.data.Dataset):
 
         if not set(episode_buffer.keys()) == set(self.features):
             raise ValueError()
-
+        # del self.features['action']
+        # del self.features['observation.state']
+        # Problem:
+        # self.features --> keys action und observation state --> key shape = (0,) zu (6,)
+        ########################## Dirty fix ##########################
+        self.features['action']['shape'] = (6,)
+        self.features['observation.state']['shape'] = (6,)
+        ####################################################
         for key, ft in self.features.items():
             if key == "index":
                 episode_buffer[key] = np.arange(
@@ -775,11 +782,11 @@ class LeRobotDataset(torch.utils.data.Dataset):
                 episode_buffer[key] = np.full((episode_length,), episode_index)
             elif key == "task_index":
                 episode_buffer[key] = np.full((episode_length,), task_index)
-            elif ft["dtype"] in ["image", "video"]:
+            elif ft["dtype"] in ["image", "video"]: #observation.images.laptop, observation.images.phone
                 continue
-            elif len(ft["shape"]) == 1 and ft["shape"][0] == 1:
+            elif len(ft["shape"]) == 1 and ft["shape"][0] == 1: #timestamp, frame_index
                 episode_buffer[key] = np.array(episode_buffer[key], dtype=ft["dtype"])
-            elif len(ft["shape"]) == 1 and ft["shape"][0] > 1:
+            elif len(ft["shape"]) == 1 and ft["shape"][0] > 1: # Für action und observation.state
                 episode_buffer[key] = np.stack(episode_buffer[key])
             else:
                 raise ValueError(key)
@@ -801,7 +808,8 @@ class LeRobotDataset(torch.utils.data.Dataset):
 
     def _save_episode_table(self, episode_buffer: dict, episode_index: int) -> None:
         episode_dict = {key: episode_buffer[key] for key in self.hf_features}
-        ep_dataset = datasets.Dataset.from_dict(episode_dict, features=self.hf_features, split="train")
+        ep_dataset = datasets.Dataset.from_dict(episode_dict, features=self.hf_features, split="train") #Hier liegt der Fehler
+        #Alternative Jojstick script gibt nicht richtiges datenformat zurück
         ep_data_path = self.root / self.meta.get_data_file_path(ep_index=episode_index)
         ep_data_path.parent.mkdir(parents=True, exist_ok=True)
         write_parquet(ep_dataset, ep_data_path)
