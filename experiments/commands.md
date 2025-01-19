@@ -9,10 +9,12 @@ python lerobot/scripts/control_robot.py teleoperate --robot-path lerobot/configs
 python lerobot/scripts/control_robot.py record --robot-path lerobot/configs/robot/so100-ps4.yaml --fps 30 --push-to-hub 0 --tags tutorial --warmup-time-s 5 --episode-time-s 60 --reset-time-s 30 --num-episodes 1 --single-task 'Pickup the object and put it in the box'
 
 
-python lerobot/scripts/control_robot.py record --robot-path lerobot/configs/robot/so100-ps4.yaml --fps 30 --repo-id danielholl/koch_test --tags tutorial --warmup-time-s 5 --episode-time-s 60 --reset-time-s 30 --num-episodes 1 --single-task 'Pickup the object and put it in the box'
+python lerobot/scripts/control_robot.py record --robot-path lerobot/configs/robot/so100-ps4.yaml --fps 30 --push-to-hub 1 --repo-id danielholl/pickandplace1 --tags tutorial --warmup-time-s 10 --episode-time-s 60 --reset-time-s 10 --num-episodes 20 --single-task 'Pickup the object and put it in the box' --resume 1 --local-files-only 1
 
 python lerobot/scripts/control_robot.py record --fps 30 --repo-id danielholl/koch_test --num-episodes 1 --run-compute-stats 0 --single-task 'Pickup the object and put it in the box'
 
+
+python lerobot/scripts/control_robot.py replay --robot-path lerobot/configs/robot/so100-ps4.yaml --fps 30 --repo-id danielholl/test2 --episode 0 --local-files-only 1
 
 
 
